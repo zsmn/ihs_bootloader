@@ -3,7 +3,8 @@ org 0x7E00
 jmp 0x0000:start
 
 data:
-	
+	mostra db "SISTEMA DE REGISTRO DE CONTAS BANCARIAS", 13
+    instr1 db "Nome (20 caracteres) --- CPF (11 caracteres) --- Conta Bancaria (6 caracteres)", 13
     mostrapergunta db "Qual operacao voce deseja realizar?", 13
     mostrapergunta1 db "1 - Cadastro", 13
     mostrapergunta2 db "2 - Busca Cadastro", 13
@@ -13,7 +14,7 @@ data:
     mostranome db "Digite o seu nome:", 13
 	mostracpf db "Digite o seu cpf:", 13
 	mostracb db "Digite o numero da conta bancaria:", 13
-
+    instrucao db 0
 
 start:
 	; Modo vídeo.
@@ -27,48 +28,89 @@ start:
 
 
 telaInicial:
+    .loop_infinito: ;loop que so termina quando o usuario digita 5 para poder sair do programa
+	    ; chamar o modo video para limpar a tela
+	    mov ah, 0
+	    mov al, 12h
+	    int 10h
 
-	; chamar o modo video para limpar a tela
-	mov ah, 0
+        mov si, mostrapergunta
+	    mov dh, 00h
+	    mov dl, 00h
+        call printarString
+
+        mov si, mostrapergunta1
+        mov dh, 01h
+        mov dl, 00h
+        call printarString
+
+        mov si, mostrapergunta2
+        mov dh, 02h
+        mov dl, 00h
+        call printarString
+
+        mov si, mostrapergunta3
+        mov dh, 03h
+        mov dl, 00h
+        call printarString
+
+        mov si, mostrapergunta4
+        mov dh, 04h
+        mov dl, 00h
+        call printarString
+
+        mov si, mostrapergunta5
+        mov dh, 05h
+        mov dl, 00h
+        call printarString
+
+        call getchar
+        cmp al, '1'
+        je cadastro
+        cmp al, '2'
+        je busca
+        cmp al, '3'
+        je editar
+        cmp al, '4'
+        je deletar
+        cmp al, '5'
+        je exit
+
+        jmp .loop_infinito
+
+
+
+cadastro:
+    ; Limpando a tela
+    mov ah, 0
+	mov al, 12h
+	int 10h
+    jmp main
+
+busca:
+    ; Limpando a tela
+    mov ah, 0
 	mov al, 12h
 	int 10h
 
-    mov si, mostrapergunta
-	mov dh, 00h
-	mov dl, 00h
-    call printarString
+    jmp main
 
-    mov si, mostrapergunta1
-    mov dh, 01h
-    mov dl, 00h
-    call printarString
+editar:
+    ; Limpando a tela
+    mov ah, 0
+	mov al, 12h
+	int 10h
 
-    mov si, mostrapergunta2
-    mov dh, 02h
-    mov dl, 00h
-    call printarString
+    jmp main
 
-    mov si, mostrapergunta3
-    mov dh, 03h
-    mov dl, 00h
-    call printarString
-
-    mov si, mostrapergunta4
-    mov dh, 04h
-    mov dl, 00h
-    call printarString
-
-    mov si, mostrapergunta5
-    mov dh, 05h
-    mov dl, 00h
-    call printarString
-
+deletar:
+    ; Limpando a tela
+    mov ah, 0
+	mov al, 12h
+	int 10h
     
+    jmp main 
 
-
-
-    .loop:
-        jmp .loop
 
 
 printDelayStr:
